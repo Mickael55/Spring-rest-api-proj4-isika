@@ -1,0 +1,18 @@
+stages:
+  - build
+  - deploy-staging
+
+maven-build:
+  image: maven
+  stage: build
+  script: mvn install -DskipTests
+  artifacts:
+    paths:
+      - target/*.jar
+
+deployment-staging:
+  stage: deploy-staging
+  before_script:
+    - gem install dpl
+  script:
+    - dpl --provider=heroku --app=spring-connection-mh55-staging --api_key=$API_KEY
